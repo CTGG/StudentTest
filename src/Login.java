@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 
 
 
-
+ 
 
 
 /**
@@ -42,7 +42,7 @@ public class Login extends HttpServlet {
 		if (dispatcher!= null) 
 			dispatcher.include(request,response);		
 		String login="";
-		HttpSession session = request.getSession(false);
+		HttpSession session = request.getSession(true);
 		Cookie cookie = null;
         Cookie[] cookies = request.getCookies();
   
@@ -74,7 +74,11 @@ public class Login extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		RequestDispatcher dispatcher
+		 =request.getRequestDispatcher("/ShowScore"); 
+		if (dispatcher!= null) 
+			dispatcher.include(request,response);
+		
 		String studentID = request.getParameter("id");
 		String password = request.getParameter("password");
 		
@@ -94,7 +98,7 @@ public class Login extends HttpServlet {
                 cookie = cookies[i];
                 if (cookie.getName().equals("LoginCookie")) {
                     login=cookie.getValue();
-                    System.out.println("login cookie "+login);
+                    pWriter.println(login);
                     break;
                 }
             }

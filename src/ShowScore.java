@@ -1,6 +1,14 @@
 
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Properties;
 
 import javax.naming.InitialContext;
@@ -56,10 +64,10 @@ public class ShowScore extends HttpServlet {
 		processRequest(request,response);
 	}
 
-	private void processRequest(HttpServletRequest request, HttpServletResponse response) {
+	private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession session = request.getSession(false);
 		boolean cookieFound = false;
-		System.out.println(request.getParameter("login")+" log in");
+		System.out.println(request.getParameter("id")+" log in");
 		Cookie cookie = null;
 		Cookie[] cookies = request.getCookies();
 		if (null != cookies) {
@@ -73,7 +81,7 @@ public class ShowScore extends HttpServlet {
 		}
 		
 		if (session == null) {
-			String loginValue = request.getParameter("login");
+			String loginValue = request.getParameter("id");
 			boolean isLoginAction = (null == loginValue) ? false : true;
 			if (isLoginAction) { // User is logging in
 				if (cookieFound) { // If the cookie exists update the value only
@@ -95,14 +103,12 @@ public class ShowScore extends HttpServlet {
 				session.setAttribute("login", loginValue);
 
 				request.setAttribute("login", loginValue);
-//				getStockList(request, response);
-//				displayMyStocklistPage(request, response);
-//				displayLogoutPage(request, response);
+				displayScores(request, response);
 
 			} else {
 				System.out.println(loginValue + " session null");
 				// Display the login page. If the cookie exists, set login
-//				response.sendRedirect(request.getContextPath() + "/Login");
+				response.sendRedirect("/Login");
 			}
 		} else {
 			// 或未注销，重新加载该页面，session不为空
@@ -110,12 +116,115 @@ public class ShowScore extends HttpServlet {
 			System.out.println(loginValue + " session");
 
 			request.setAttribute("login", loginValue);
-//			getStockList(request, response);
-//			displayMyStocklistPage(request, response);
-//			displayLogoutPage(request, response);
-
+			displayScores(request, response);
+			
+			
 		}
 
+	}
+
+
+	private void displayScores(HttpServletRequest request, HttpServletResponse response) {
+		boolean isExist = isExist(request.getParameter("id"));
+		if (isExist) {
+			ArrayList<Score> list = new ArrayList<>();
+			ResultSet resultSet = null;
+			try {
+				Connection connection = dataSource.getConnection();
+				PreparedStatement statement = connection.prepareStatement("select id, course,score from score where id = ?");
+				statement.setString(1, request.getParameter("id"));
+				resultSet = statement.executeQuery();
+				
+				while (resultSet.next()) {
+					Score score = new Score();
+					score.setId(resultSet.getString("id"));
+					score.setCourse(resultSet.getString("course"));
+					score.setScore(resultSet.getInt("score"));
+					list.add(score);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			if (resultSet == null) {
+				PrintWriter out;
+				try {
+					out = response.getWriter();
+					out.println("hhh");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			
+			try {
+				PrintWriter out = response.getWriter();
+				out.println("<html>");
+				out.println("<head><title>"+request.getParameter("id")+"</title></head>");
+				
+				for (int i = 0; i < list.size(); i++) {
+					Score score = (Score) list.get(i);
+					out.println("<body>");
+					out.println("<p>"+score.getId()+"</p>");
+					out.println("<p>"+score.getCourse()+"</p>");
+					String sc = "<p";
+					
+					if (score.getScore() == -1) {
+						sc+=" style='color:red'>";
+						sc+=" not take examination";
+					}else {
+						sc+=">";
+						sc+=score.getScore();
+					}
+					sc+="</p></body>";
+					out.println(sc);
+				}
+				
+				out.println("</html>");
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else {
+			
+			try {
+				PrintWriter out = response.getWriter();
+				out.println("<html>");
+				String sc = "<p style='color:red'>";
+				sc+=" id does not exist";
+				sc+="</p></body>";
+				out.println(sc);
+				out.println("</html>");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+
+		
+	}
+
+
+	private boolean isExist(String id) {
+		// TODO Auto-generated method stub
+		boolean result = false;
+		ResultSet resultSet = null;
+		try {
+			Connection connection = dataSource.getConnection();
+			PreparedStatement statement = connection.prepareStatement("select id from login");
+			resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				if (id.equals(resultSet.getString("id"))) {
+					result = true;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 
@@ -123,8 +232,7 @@ public class ShowScore extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		processRequest(request, response);
 	}
 
 }
