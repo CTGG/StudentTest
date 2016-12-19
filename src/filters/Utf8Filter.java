@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet Filter implementation class Utf8Filter
  */
-@WebFilter("*")
+@WebFilter("/Login")
 public class Utf8Filter implements Filter {
 
     /**
@@ -33,6 +33,7 @@ public class Utf8Filter implements Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		// TODO Auto-generated method stub
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
 		// pass the request along the filter chain

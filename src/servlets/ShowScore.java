@@ -14,7 +14,6 @@ import java.util.Properties;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -39,11 +38,14 @@ public class ShowScore extends HttpServlet {
      */
     public ShowScore() {
         super();
+        // TODO Auto-generated constructor stub
     }
     
     
     public void init() {
+    	// TODO Auto-generated method stub
     	InitialContext jndiContext = null;
+    	
     	Properties properties = new Properties();
     	properties.put(javax.naming.Context.PROVIDER_URL, "jnp:///");
     	properties.put(javax.naming.Context.INITIAL_CONTEXT_FACTORY, "org.apache.naming.java.javaURLContextFactory");
@@ -61,13 +63,14 @@ public class ShowScore extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
 		processRequest(request,response);
 	}
 
 	private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		
 		HttpSession session = request.getSession(false);
 		boolean cookieFound = false;
+		System.out.println(request.getParameter("id")+" log in");
 		Cookie cookie = null;
 		Cookie[] cookies = request.getCookies();
 		if (null != cookies) {
@@ -82,7 +85,6 @@ public class ShowScore extends HttpServlet {
 		
 		if (session == null) {
 			String loginValue = request.getParameter("id");
-			
 			boolean isLoginAction = (null == loginValue) ? false : true;
 			if (isLoginAction) { // User is logging in
 				if (cookieFound) { // If the cookie exists update the value only
@@ -101,9 +103,9 @@ public class ShowScore extends HttpServlet {
 
 				// create a session to show that we are logged in
 				session = request.getSession(true);
-				session.setAttribute("id", loginValue);
+				session.setAttribute("login", loginValue);
 
-				request.setAttribute("id", loginValue);
+				request.setAttribute("login", loginValue);
 				displayScores(request, response);
 
 			} else {
@@ -113,10 +115,10 @@ public class ShowScore extends HttpServlet {
 			}
 		} else {
 			// 或未注销，重新加载该页面，session不为空
-			String loginValue = (String) session.getAttribute("id");
+			String loginValue = (String) session.getAttribute("login");
 			System.out.println(loginValue + " session");
 
-			request.setAttribute("id", loginValue);
+			request.setAttribute("login", loginValue);
 			displayScores(request, response);
 			
 			
@@ -181,11 +183,10 @@ public class ShowScore extends HttpServlet {
 					sc+="</p>";
 					out.println(sc);
 				}
-				ServletContext Context= getServletContext();
-				out.println("<p>总人数:	 " +Context.getAttribute("webCounter")  + "</p>");
+//				out.println("<p>总人数:	 " + totalCounter + "</p>");
 //				out.println("<p>已登录人数 :	" + onlineCounter + "</p>");
 //				out.println("</p>游客人数 :		" + guestCounter + "</p>");
-				out.println("<form name='f1' id='f1' action='/StudentTest/Login' method='get'><table align='center' border='0'><tr><td colspan='2' align='center'><input type='submit' value='Logout'></td></tr></table></form>");
+				out.println("<form name='f1' id='f1' action='/StudentTest/servlets/Login' method='post'><table align='center' border='0'><tr><td colspan='2' align='center'><input type='reset' value='Logout'></td></tr></table></form>");
 				out.println("<body></html>");
 
 			} catch (IOException e) {
