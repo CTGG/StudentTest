@@ -1,3 +1,4 @@
+package servlets;
 
 
 import java.io.IOException;
@@ -21,6 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
+
+import model.Score;
 
 
 /**
@@ -162,29 +165,31 @@ public class ShowScore extends HttpServlet {
 				PrintWriter out = response.getWriter();
 				out.println("<html>");
 				out.println("<head><title>"+request.getParameter("id")+"</title></head>");
-				
+				out.println("<body>");
 				for (int i = 0; i < list.size(); i++) {
 					Score score = (Score) list.get(i);
-					out.println("<body>");
-					out.println("<p>"+score.getId()+"</p>");
-					out.println("<p>"+score.getCourse()+"</p>");
+					
+					out.println("<p> studentName:  "+score.getId()+"</p>");
+					out.println("<p> courseName:   "+score.getCourse()+"</p>");
 					String sc = "<p";
 					
 					if (score.getScore() == -1) {
 						sc+=" style='color:red'>";
-						sc+=" not take examination";
+						sc+="score:        not take examination";
 					}else {
-						sc+=">";
+						sc+=">score:       ";
 						sc+=score.getScore();
 					}
-					sc+="</p></body>";
+					sc+="</p>";
 					out.println(sc);
 				}
-				
-				out.println("</html>");
+//				out.println("<p>总人数:	 " + totalCounter + "</p>");
+//				out.println("<p>已登录人数 :	" + onlineCounter + "</p>");
+//				out.println("</p>游客人数 :		" + guestCounter + "</p>");
+				out.println("<form name='f1' id='f1' action='/StudentTest/servlets/Login' method='post'><table align='center' border='0'><tr><td colspan='2' align='center'><input type='reset' value='Logout'></td></tr></table></form>");
+				out.println("<body></html>");
 
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}else {
@@ -209,7 +214,6 @@ public class ShowScore extends HttpServlet {
 
 
 	private boolean isExist(String id) {
-		// TODO Auto-generated method stub
 		boolean result = false;
 		ResultSet resultSet = null;
 		try {

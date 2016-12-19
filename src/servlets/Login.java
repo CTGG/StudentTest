@@ -1,3 +1,4 @@
+package servlets;
 
 
 import java.io.IOException;
@@ -86,6 +87,7 @@ public class Login extends HttpServlet {
 		
 		String login="";
 		HttpSession session = request.getSession(false);
+		session.setAttribute("id", studentID);
 		Cookie cookie = null;
         Cookie[] cookies = request.getCookies();
   
@@ -103,13 +105,13 @@ public class Login extends HttpServlet {
                 }
             }
         }
-    
         // Logout action removes session, but the cookie remains
         if (null != request.getParameter("Logout")) {
             if (null != session) {
             	session.invalidate();
                 session = null;
             }
+
         }
        
         
