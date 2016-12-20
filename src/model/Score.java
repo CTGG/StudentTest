@@ -5,6 +5,8 @@ public class Score implements Serializable{
 	private String id;
 	private String course;
 	private int score;
+	private String teacher;
+	
 	public String getId() {
 		return id;
 	}
@@ -22,6 +24,12 @@ public class Score implements Serializable{
 	}
 	public void setScore(int score) {
 		this.score = score;
+	}
+	public String getTeacher() {
+		return teacher;
+	}
+	public void setTeacher(String teacher) {
+		this.teacher = teacher;
 	}
 	
 	
