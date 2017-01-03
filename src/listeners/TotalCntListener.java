@@ -20,7 +20,8 @@ import javax.servlet.annotation.WebListener;
 @WebListener
 public class TotalCntListener implements ServletContextListener, ServletContextAttributeListener {
 	int counter;
-	String counterFilePath= "C:\\Users\\st0001\\Desktop\\StudentTest\\WebContent\\totalCounter.txt";
+//	String counterFilePath= "C:\\Users\\st0001\\Desktop\\StudentTest\\WebContent\\totalCounter.txt";
+	String counterFilePath = "/Users/G/Desktop/StudentTest/WebContent/totalCounter.txt";
 
 
 	/**

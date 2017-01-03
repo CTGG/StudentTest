@@ -27,7 +27,10 @@ public class OnlineListener implements ServletContextListener, ServletContextAtt
     }
 
     int counter;
-	String counterFilePath= "C:\\Users\\st0001\\Desktop\\StudentTest\\WebContent\\onlineCounter.txt";
+    //windows
+//	String counterFilePath= "C:\\Users\\st0001\\Desktop\\StudentTest\\WebContent\\onlineCounter.txt";
+	//mac
+	String counterFilePath = "/Users/G/Desktop/StudentTest/WebContent/onlineCounter.txt";
 
 
 	/**
