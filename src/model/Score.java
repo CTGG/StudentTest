@@ -1,10 +1,24 @@
 package model;
+import javax.persistence.*;
 import java.io.Serializable;
 
+
+
+@Entity
+
+@Table(name = "scores")
 public class Score implements Serializable{
+	@Id
+	@Column(name = "id")
 	private String id;
+	@Id
+	@Column(name = "course")
 	private String course;
+	@Basic
+	@Column(name = "score")
 	private int score;
+	@Basic
+	@Column(name = "teacher")
 	private String teacher;
 	
 	public String getId() {
@@ -31,6 +45,7 @@ public class Score implements Serializable{
 	public void setTeacher(String teacher) {
 		this.teacher = teacher;
 	}
+
 	
 	
 	

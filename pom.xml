@@ -24,6 +24,45 @@
   
   
   <dependencies>
+  <dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-core</artifactId>
+      <!--<exclusions>-->
+          <!--<exclusion>-->
+              <!--<groupid>org.hibernate.common</groupid>-->
+              <!--<artifactid>hibernate-commons-annotations</artifactid>-->
+          <!--</exclusion>-->
+      <!--</exclusions>-->
+    <version>5.2.8.Final</version>
+</dependency>
+<!--<dependency>-->
+    <!--<groupId>org.hibernate.common</groupId>-->
+    <!--<artifactId>hibernate-commons-annotations</artifactId>-->
+    <!--<version>4.0.1.Final</version>-->
+    <!--&lt;!&ndash;<exclusions>&ndash;&gt;-->
+        <!--&lt;!&ndash;<exclusion>&ndash;&gt;-->
+            <!--&lt;!&ndash;<artifactId>jboss-logging</artifactId>&ndash;&gt;-->
+            <!--&lt;!&ndash;<groupId>org.jboss.logging</groupId>&ndash;&gt;-->
+        <!--&lt;!&ndash;</exclusion>&ndash;&gt;-->
+    <!--&lt;!&ndash;</exclusions>&ndash;&gt;-->
+<!--</dependency>-->
+<dependency>
+    <groupId>dom4j</groupId>
+    <artifactId>dom4j</artifactId>
+    <version>1.6.1</version>
+</dependency>
+
+<dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-entitymanager</artifactId>
+    <exclusions>
+        <exclusion>
+            <groupId>org.hibernate.common</groupId>
+            <artifactId>hibernate-commons-annotations</artifactId>
+        </exclusion>
+    </exclusions>
+    <version>5.2.8.Final</version>
+</dependency>
   	<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
 <dependency>
     <groupId>javax.servlet</groupId>
@@ -47,6 +86,26 @@
     <artifactId>mysql-connector-java</artifactId>
     <version>5.1.36</version>
 </dependency>
-  	
+      <dependency>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter-api</artifactId>
+          <version>RELEASE</version>
+      </dependency>
+      <dependency>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter-api</artifactId>
+          <version>RELEASE</version>
+      </dependency>
+      <dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <version>4.12</version>
+      </dependency>
+      <dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <version>4.12</version>
+      </dependency>
+
   </dependencies>
 </project>

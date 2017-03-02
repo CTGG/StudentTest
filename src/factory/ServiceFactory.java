@@ -1,11 +1,12 @@
 package factory;
 
 import service.ScoreManagementService;
-import service.ScoreManagementServiceImpl;
+import service.ScoreManagementServiceBean;
+
 
 public class ServiceFactory {
 	public static ScoreManagementService getScoreService() {
-		return ScoreManagementServiceImpl.getInstance();
+		return ScoreManagementServiceBean.getInstance();
 	}
 
 }

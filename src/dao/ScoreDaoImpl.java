@@ -1,17 +1,18 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import model.Score;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
 
 public class ScoreDaoImpl implements ScoreDao{
 	private static ScoreDaoImpl scoreDao = new ScoreDaoImpl();
-	private static DaoHelper daoHelper = DaoHelperImpl.getInstance();
+	private Session session;
+
 	
 	private ScoreDaoImpl() {
 	}
@@ -19,61 +20,42 @@ public class ScoreDaoImpl implements ScoreDao{
 	public static ScoreDaoImpl getInstance(){
 		return scoreDao;
 	}
-	
+
+
 	@Override
 	public List<String> findAllUsers() {
-		Connection connection = daoHelper.getConnection();
-		PreparedStatement pStatement = null;
-		ResultSet resultSet = null;
-		ArrayList<String> users = new ArrayList<>();
-		try {
-			pStatement = connection.prepareStatement("select id from score");
-			resultSet = pStatement.executeQuery();
-			while (resultSet.next()) {
-				String user = resultSet.getString("id");
-				users.add(user);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			daoHelper.closeConnection(connection);
-			daoHelper.closePreparedStatement(pStatement);
-			daoHelper.closeResult(resultSet);
-		}
-		
-		return users;
+        session = HibernateUtil.getSession();
+        Transaction transaction = session.beginTransaction();
+        List<String> users = new ArrayList<>();
+        List list=session.createNativeQuery("select distinct id from `scores` where 1").list();
+        transaction.commit();
+        session.close();
+        for (int i=0; i < list.size() ; i++){
+            users.add((String)list.get(i));
+        }
+        return users;
+
 	}
 
 	@Override
 	public List<Score> findScoresById(String id) {
-		// TODO Auto-generated method stub
-		Connection connection = daoHelper.getConnection();
-		PreparedStatement pStatement = null;
-		ResultSet resultSet = null;
-		ArrayList<Score> scores = new ArrayList<>();
-		try {
-			pStatement = connection.prepareStatement("select id, course,score from score where id = ?");
-			pStatement.setString(1, id);
-			resultSet = pStatement.executeQuery();
-			//TODO
-			System.out.println("id   "+id);
-			System.out.println("resultset     "+resultSet.getFetchSize());
-			while (resultSet.next()) {
-				Score score = new Score();
-				score.setId(resultSet.getString("id"));
-				score.setCourse(resultSet.getString("course"));
-				score.setScore(resultSet.getInt("score"));
-				scores.add(score);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			daoHelper.closeConnection(connection);
-			daoHelper.closePreparedStatement(pStatement);
-			daoHelper.closeResult(resultSet);
-		}
-		
-		return scores;
+
+        session = HibernateUtil.getSession();
+        String hql = "from Score sc where sc.id =:id";
+        Query query = session.createQuery(hql);
+        query.setString("id",id);
+        List<Score> list = query.list();
+
+        for (Score s:list
+             ) {
+            System.out.println(s.getCourse());
+        }
+        return list;
 	}
+	public static void main(String[] args){
+	    ScoreDaoImpl imp = ScoreDaoImpl.getInstance();
+	    ;
+        System.out.println(imp.findScoresById("浩然"));
+    }
 
 }
